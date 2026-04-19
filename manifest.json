@@ -1,0 +1,19 @@
+{
+  "name": "Workouts",
+  "short_name": "Workouts",
+  "description": "Weekly lifting + Zone 2 schedule",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f7f7f8",
+  "theme_color": "#111827",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
