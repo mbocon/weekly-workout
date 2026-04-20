@@ -171,13 +171,19 @@
 
     .exercise {
       display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 16px;
+      flex-direction: column;
+      gap: 8px;
       padding: 13px 16px;
       border-bottom: 1px solid var(--border);
     }
     .exercise:last-child { border-bottom: none; }
+
+    .exercise-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+    }
 
     .exercise .name {
       font-weight: 600;
@@ -192,6 +198,40 @@
       flex: 1 1 auto;
     }
 
+    .exercise-log {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .exercise-log input {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 14px;
+      font-family: inherit;
+      background: var(--bg);
+      color: var(--text);
+      -webkit-appearance: none;
+      appearance: none;
+      transition: border-color 0.15s ease, background 0.15s ease;
+    }
+    .exercise-log input:focus {
+      outline: none;
+      border-color: var(--text);
+      background: var(--card);
+    }
+    .exercise-log input::placeholder { color: var(--text-muted); }
+    .last-entry {
+      font-size: 12px;
+      color: var(--text-muted);
+      padding-left: 2px;
+    }
+    .last-entry strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
     .section-label {
       font-size: 11px;
       font-weight: 700;
@@ -204,7 +244,7 @@
     .section-label:first-child { margin-top: 0; }
 
     @media (max-width: 520px) {
-      .exercise {
+      .exercise-top {
         flex-direction: column;
         align-items: stretch;
         gap: 2px;
@@ -455,6 +495,58 @@
       sunday: 'Sunday'
     };
 
+    const LOG_KEY = 'workouts_log_v1';
+
+    function todayISO() {
+      const d = new Date();
+      return d.getFullYear() + '-' +
+        String(d.getMonth() + 1).padStart(2, '0') + '-' +
+        String(d.getDate()).padStart(2, '0');
+    }
+
+    function loadLog() {
+      try { return JSON.parse(localStorage.getItem(LOG_KEY)) || {}; }
+      catch (e) { return {}; }
+    }
+
+    function saveLog(log) {
+      try { localStorage.setItem(LOG_KEY, JSON.stringify(log)); }
+      catch (e) {}
+    }
+
+    function getEntry(exerciseName, dateISO) {
+      const log = loadLog();
+      return (log[exerciseName] && log[exerciseName][dateISO]) || '';
+    }
+
+    function setEntry(exerciseName, dateISO, value) {
+      const log = loadLog();
+      if (!log[exerciseName]) log[exerciseName] = {};
+      const trimmed = value.trim();
+      if (trimmed) log[exerciseName][dateISO] = trimmed;
+      else delete log[exerciseName][dateISO];
+      if (log[exerciseName] && Object.keys(log[exerciseName]).length === 0) {
+        delete log[exerciseName];
+      }
+      saveLog(log);
+    }
+
+    function getLatestPrior(exerciseName, beforeDateISO) {
+      const log = loadLog();
+      const entries = log[exerciseName];
+      if (!entries) return null;
+      const dates = Object.keys(entries).filter(d => d < beforeDateISO).sort();
+      if (dates.length === 0) return null;
+      const last = dates[dates.length - 1];
+      return { date: last, value: entries[last] };
+    }
+
+    function formatLogDate(dateISO) {
+      const parts = dateISO.split('-').map(Number);
+      const date = new Date(parts[0], parts[1] - 1, parts[2]);
+      return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+    }
+
     function weeklyZone2Totals() {
       let min = 0, max = 0;
       Object.values(schedule).forEach(d => {
@@ -466,7 +558,8 @@
       return { min, max };
     }
 
-    function renderBlock(block) {
+    function renderBlock(block, options) {
+      const opts = options || {};
       const el = document.createElement('div');
       el.className = 'block accent-' + (block.accent || 'orange');
 
@@ -486,17 +579,53 @@
 
       const ul = document.createElement('ul');
       ul.className = 'exercises';
+      const today = todayISO();
       block.exercises.forEach(ex => {
         const li = document.createElement('li');
         li.className = 'exercise';
+
+        const top = document.createElement('div');
+        top.className = 'exercise-top';
         const name = document.createElement('span');
         name.className = 'name';
         name.textContent = ex.name;
         const pres = document.createElement('span');
         pres.className = 'prescription';
         pres.textContent = ex.prescription;
-        li.appendChild(name);
-        li.appendChild(pres);
+        top.appendChild(name);
+        top.appendChild(pres);
+        li.appendChild(top);
+
+        if (opts.log) {
+          const logWrap = document.createElement('div');
+          logWrap.className = 'exercise-log';
+
+          const input = document.createElement('input');
+          input.type = 'text';
+          input.placeholder = 'Log what you did…';
+          input.autocomplete = 'off';
+          input.spellcheck = false;
+          input.setAttribute('aria-label', 'Log for ' + ex.name);
+          input.value = getEntry(ex.name, today);
+          input.addEventListener('input', () => {
+            setEntry(ex.name, today, input.value);
+          });
+          logWrap.appendChild(input);
+
+          const prior = getLatestPrior(ex.name, today);
+          if (prior) {
+            const lastEl = document.createElement('div');
+            lastEl.className = 'last-entry';
+            lastEl.innerHTML =
+              'Last: <strong></strong> — <span></span>';
+            lastEl.querySelector('strong').textContent = prior.value;
+            lastEl.querySelector('span').textContent = formatLogDate(prior.date);
+            logWrap.appendChild(lastEl);
+          }
+
+          li.appendChild(logWrap);
+        }
+
         ul.appendChild(li);
       });
       el.appendChild(ul);
@@ -570,14 +699,14 @@
       content.appendChild(liftsLabel);
 
       const liftsBlock = { ...day.lifts, title: 'Main Lifts', subtitle: day.lifts.subtitle };
-      content.appendChild(renderBlock(liftsBlock));
+      content.appendChild(renderBlock(liftsBlock, { log: true }));
 
       if (day.circuit) {
         const circuitLabel = document.createElement('div');
         circuitLabel.className = 'section-label';
         circuitLabel.textContent = 'Finisher Circuit';
         content.appendChild(circuitLabel);
-        content.appendChild(renderBlock(day.circuit));
+        content.appendChild(renderBlock(day.circuit, { log: true }));
       }
 
       if (day.zone2) {
