@@ -340,144 +340,44 @@
       ]
     };
 
-    const carryCircuit = {
-      title: 'Carry Circuit',
-      subtitle: 'Mon / Thu',
-      accent: 'orange',
-      exercises: [
-        { name: 'DB Farmer Carry',      prescription: "100' — pick moderate weights" },
-        { name: 'Suitcase Carry',       prescription: "100' / side" },
-        { name: 'Goblet Forward Lunge', prescription: '5 / side' },
-        { name: 'Dumbbell Step Up',     prescription: "10 / side — go lighter if needed" }
-      ]
-    };
-
-    const sandbagCircuit = {
-      title: 'Sandbag Circuit',
-      subtitle: 'Tue / Fri',
-      accent: 'green',
-      exercises: [
-        { name: 'Sandbag Over the Shoulder', prescription: '4 × 8' },
-        { name: 'Sandbag Zercher Carry',     prescription: "100'" },
-        { name: 'Jump Rope',                 prescription: '100 reps' },
-        { name: 'Medicine Ball Slams',       prescription: '10' }
-      ]
-    };
-
-    const monday = {
-      title: 'Monday',
-      subtitle: 'Bench + core',
+    const splitSquatBench = {
+      subtitle: 'Split squat + bench + row',
       accent: 'main',
       exercises: [
-        { name: 'Bench Press', prescription: '3 × 5 (3–5 min rest)' },
-        { name: 'Plank',       prescription: '3 × 60 sec (60 sec rest)' }
+        { name: 'Bulgarian Split Squat', prescription: '3 × 8 / side' },
+        { name: 'Bench Press',           prescription: '3 × 5 (3–5 min rest)' },
+        { name: 'Bent Over Row',         prescription: '3 × 8' }
       ]
     };
 
-    const tuesday = {
-      title: 'Tuesday',
-      subtitle: 'Squat + core',
+    const deadliftOhp = {
+      subtitle: 'Deadlift + OHP',
       accent: 'main',
       exercises: [
-        { name: 'Squats',     prescription: '3 × 5 (3–5 min rest)' },
-        { name: 'Side Plank', prescription: '4 × 30 sec' }
+        { name: 'Deadlift',     prescription: '1 × 5' },
+        { name: 'Standing OHP', prescription: '3 × 5 (3–5 min rest)' }
       ]
     };
 
-    const wednesday = {
-      title: 'Wednesday',
-      subtitle: 'Accessories',
-      accent: 'main',
-      exercises: [
-        { name: 'Single Arm DB Bench', prescription: '3 × 8' },
-        { name: 'DB Single Arm Row',   prescription: '3 × 8–12' },
-        { name: 'Tricep Extensions',   prescription: '3 × 10' },
-        { name: 'Bicep Curls',         prescription: '3 × 10' },
-        { name: 'Plank',               prescription: '3 × 60 sec (60 sec rest)' }
-      ]
-    };
+    const jiuJitsuSubtitle = 'No-gi jiu-jitsu — afternoon';
 
-    const thursday = {
-      title: 'Thursday',
-      subtitle: 'OHP + core',
-      accent: 'main',
-      exercises: [
-        { name: 'Standing OHP', prescription: '3 × 5 (3–5 min rest)' },
-        { name: 'Side Plank',   prescription: '4 × 30 sec' }
-      ]
-    };
-
-    const friday = {
-      title: 'Friday',
-      subtitle: 'Deadlift + core',
-      accent: 'main',
-      exercises: [
-        { name: 'Deadlift', prescription: '1 × 5' },
-        { name: 'Plank',    prescription: '3 × 60 sec (60 sec rest)' }
-      ]
-    };
-
-    const saturday = {
-      title: 'Saturday',
-      subtitle: 'Repeat Wednesday',
-      accent: 'main',
-      exercises: wednesday.exercises.slice()
-    };
-
-    const zone2Short = {
+    const zone2 = {
       title: 'Zone 2 Cardio',
-      subtitle: 'After finisher',
+      subtitle: 'Track in Morpheus',
       accent: 'blue',
-      minMinutes: 25,
-      maxMinutes: 30,
       exercises: [
-        { name: 'Row or Bike', prescription: '25–30 min @ Zone 2' }
+        { name: 'Row, Bike, or Easy Run', prescription: '60 min @ Zone 2' }
       ]
     };
-
-    const zone2Medium = {
-      title: 'Zone 2 Cardio',
-      subtitle: 'Primary cardio (no finisher)',
-      accent: 'blue',
-      minMinutes: 45,
-      maxMinutes: 50,
-      exercises: [
-        { name: 'Row or Bike', prescription: '45–50 min @ Zone 2' }
-      ]
-    };
-
-    const zone2Long = {
-      title: 'Zone 2 Cardio',
-      subtitle: 'After main lifts',
-      accent: 'blue',
-      minMinutes: 50,
-      maxMinutes: 55,
-      exercises: [
-        { name: 'Row or Bike', prescription: '50–55 min @ Zone 2' }
-      ]
-    };
-
-    const zone2Extended = {
-      title: 'Zone 2 Cardio',
-      subtitle: 'Long session',
-      accent: 'blue',
-      minMinutes: 60,
-      maxMinutes: 65,
-      exercises: [
-        { name: 'Row or Bike', prescription: '60–65 min @ Zone 2' }
-      ]
-    };
-
-    const WEEKLY_ZONE2_TARGET = { min: 180, max: 240 };
 
     const schedule = {
-      monday:    { lifts: monday,    circuit: carryCircuit,   zone2: null },
-      tuesday:   { lifts: tuesday,   circuit: null,           zone2: zone2Medium },
-      wednesday: { lifts: wednesday, circuit: null,           zone2: zone2Long },
-      thursday:  { lifts: thursday,  circuit: carryCircuit,   zone2: null },
-      friday:    { lifts: friday,    circuit: sandbagCircuit, zone2: zone2Short },
-      saturday:  { lifts: saturday,  circuit: null,           zone2: zone2Extended },
-      sunday:    { rest: true }
+      monday:    { subtitle: jiuJitsuSubtitle, zone2 },
+      tuesday:   { lifts: splitSquatBench },
+      wednesday: { lifts: deadliftOhp },
+      thursday:  { subtitle: jiuJitsuSubtitle, zone2 },
+      friday:    { lifts: splitSquatBench },
+      saturday:  { subtitle: jiuJitsuSubtitle, zone2 },
+      sunday:    { lifts: deadliftOhp }
     };
 
     const activationByDay = {
@@ -486,7 +386,8 @@
       wednesday: activation2,
       thursday:  activation1,
       friday:    activation2,
-      saturday:  activation1
+      saturday:  activation1,
+      sunday:    activation2
     };
 
     const dayLabels = {
@@ -545,17 +446,6 @@
       const parts = dateISO.split('-').map(Number);
       const date = new Date(parts[0], parts[1] - 1, parts[2]);
       return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
-    }
-
-    function weeklyZone2Totals() {
-      let min = 0, max = 0;
-      Object.values(schedule).forEach(d => {
-        if (d.zone2) {
-          min += d.zone2.minMinutes || 0;
-          max += d.zone2.maxMinutes || 0;
-        }
-      });
-      return { min, max };
     }
 
     function renderBlock(block, options) {
@@ -642,45 +532,9 @@
       title.textContent = dayLabels[dayKey];
       content.appendChild(title);
 
-      if (day.rest) {
-        const sub = document.createElement('div');
-        sub.className = 'day-sub';
-        sub.textContent = 'Rest day — recover, hydrate, sleep.';
-        content.appendChild(sub);
-
-        const totals = weeklyZone2Totals();
-        const target = WEEKLY_ZONE2_TARGET;
-
-        let status;
-        if (totals.max < target.min)         status = 'Below target — add volume';
-        else if (totals.min >= target.min && totals.max <= target.max) status = 'On target';
-        else if (totals.min >= target.max)   status = 'Above target — watch recovery';
-        else if (totals.min >= target.min)   status = 'On target (upper end)';
-        else                                  status = 'Range overlaps target';
-
-        const summary = {
-          title: 'Weekly Zone 2 Summary',
-          subtitle: '4 sessions (Tue, Wed, Fri, Sat)',
-          accent: 'blue',
-          exercises: [
-            { name: 'Planned',  prescription: totals.min + '–' + totals.max + ' min' },
-            { name: 'Hours',    prescription: (totals.min / 60).toFixed(1) + '–' + (totals.max / 60).toFixed(1) + ' hr' },
-            { name: 'Target',   prescription: target.min + '–' + target.max + ' min (3–4 hr)' },
-            { name: 'Status',   prescription: status }
-          ]
-        };
-
-        const summaryLabel = document.createElement('div');
-        summaryLabel.className = 'section-label';
-        summaryLabel.textContent = 'This Week';
-        content.appendChild(summaryLabel);
-        content.appendChild(renderBlock(summary));
-        return;
-      }
-
       const sub = document.createElement('div');
       sub.className = 'day-sub';
-      sub.textContent = day.lifts.subtitle || '';
+      sub.textContent = day.subtitle || (day.lifts && day.lifts.subtitle) || '';
       content.appendChild(sub);
 
       const prepLabel = document.createElement('div');
@@ -693,20 +547,14 @@
       const todaysActivation = { ...activationByDay[dayKey], title: 'Activation' };
       content.appendChild(renderBlock(todaysActivation));
 
-      const liftsLabel = document.createElement('div');
-      liftsLabel.className = 'section-label';
-      liftsLabel.textContent = "Today's Lifts";
-      content.appendChild(liftsLabel);
+      if (day.lifts) {
+        const liftsLabel = document.createElement('div');
+        liftsLabel.className = 'section-label';
+        liftsLabel.textContent = "Today's Lifts";
+        content.appendChild(liftsLabel);
 
-      const liftsBlock = { ...day.lifts, title: 'Main Lifts', subtitle: day.lifts.subtitle };
-      content.appendChild(renderBlock(liftsBlock, { log: true }));
-
-      if (day.circuit) {
-        const circuitLabel = document.createElement('div');
-        circuitLabel.className = 'section-label';
-        circuitLabel.textContent = 'Finisher Circuit';
-        content.appendChild(circuitLabel);
-        content.appendChild(renderBlock(day.circuit, { log: true }));
+        const liftsBlock = { ...day.lifts, title: 'Main Lifts', subtitle: day.lifts.subtitle };
+        content.appendChild(renderBlock(liftsBlock, { log: true }));
       }
 
       if (day.zone2) {
